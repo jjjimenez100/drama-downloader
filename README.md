@@ -1,2 +1,2 @@
-# minimal-node-ts-boilerplate
-Minimal configuration for node ts including eslint and prettier
+# drama-downloader
+Utility for downloading korean dramas on dramanice
