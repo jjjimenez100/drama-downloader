@@ -45,9 +45,9 @@ class DramaNiceSearchImpl implements DramaSearch {
                 return this.parseDramaDetailsToEntity(selector, searchResult.children());
             })
             .get();
-        const matchingDramaEntities = dramaEntities.filter(dramaEntity =>
-            dramaEntity.englishTitle.includes(searchQuery),
-        );
+        const matchingDramaEntities = dramaEntities
+            .filter(dramaEntity => dramaEntity.englishTitle.includes(searchQuery))
+            .slice(0, limit);
 
         return matchingDramaEntities;
     }

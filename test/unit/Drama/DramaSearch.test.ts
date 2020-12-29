@@ -61,6 +61,43 @@ describe('DramaSearch unit tests', () => {
       Given mocked http client,
       mocked cheerio,
       and generated fake drama entities,
+      When calling findDrama with search query of second generated entity's english title,
+      limit value of 0,
+      Then return no dramas
+   `, async () => {
+      const dramaEntities: DramaEntity[] = generateFakeDramaEntities(5);
+
+      const httpClient = <HttpClient>{};
+      httpClient.get = sinon.stub().returns({ data: '<h1>test html</h1>' });
+
+      const cheerioStub = <CheerioAPI>{};
+      const cheerioBuilderMethods = {
+         find: () => {
+            return {
+               map: () => {
+                  return {
+                     get: () => dramaEntities,
+                  }
+               }
+            }
+         },
+         children: () => {},
+         eq: () => {},
+         text: () => {},
+      };
+      cheerioStub.load = sinon.stub().returns(() => cheerioBuilderMethods);
+
+      const dramaSearch: DramaNiceSearchImpl = new DramaNiceSearchImpl(httpClient, cheerioStub);
+      const expectedDrama = dramaEntities[1];
+      const foundDramas: DramaEntity[] = await dramaSearch.findDrama(expectedDrama.englishTitle, 0);
+
+      expect(foundDramas.length).to.equal(0);
+   });
+
+   it(`
+      Given mocked http client,
+      mocked cheerio,
+      and generated fake drama entities,
       When calling findDrama with no matching search query,
       Then return no dramas
    `, async () => {
